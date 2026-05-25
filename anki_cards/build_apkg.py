@@ -6,6 +6,12 @@
     python3 build_apkg.py
 
 Результат: 6-card-types-demo.apkg (импортируется в Anki desktop и AnkiDroid).
+
+Общие поля каждого типа (показываются на обеих сторонах, если заполнены):
+    Notes    — «Описание» (пояснение)
+    Quote    — цитата (блок)
+    Code     — блок кода (подсветка синтаксиса + нумерация строк, офлайн)
+    CodeLang — подпись языка над блоком кода (необязательно)
 """
 
 import os
@@ -23,6 +29,9 @@ MODEL_CLOZE = 1748000000013
 MODEL_AUDIO = 1748000000014
 MODEL_CHOICE = 1748000000015
 
+# Общие поля-«экстра», добавляются в конец каждого типа.
+EXTRAS = [{"name": "Notes"}, {"name": "Quote"}, {"name": "Code"}, {"name": "CodeLang"}]
+
 
 def read(name):
     with open(os.path.join(TPL, name), encoding="utf-8") as f:
@@ -37,7 +46,7 @@ with open(os.path.join(BASE, "styling.css"), encoding="utf-8") as f:
 basic = genanki.Model(
     MODEL_BASIC,
     "Тема · Базовая",
-    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}],
+    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}] + EXTRAS,
     templates=[{
         "name": "Карточка",
         "qfmt": read("1_basic_front.html"),
@@ -50,7 +59,7 @@ basic = genanki.Model(
 reversed_model = genanki.Model(
     MODEL_REVERSED,
     "Тема · Базовая и обратная",
-    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}],
+    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}] + EXTRAS,
     templates=[
         {
             "name": "Прямая",
@@ -70,7 +79,7 @@ reversed_model = genanki.Model(
 type_model = genanki.Model(
     MODEL_TYPE,
     "Тема · Ввод ответа",
-    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}],
+    fields=[{"name": "Front"}, {"name": "Back"}, {"name": "Image"}] + EXTRAS,
     templates=[{
         "name": "Карточка",
         "qfmt": read("3_type_front.html"),
@@ -83,7 +92,7 @@ type_model = genanki.Model(
 cloze_model = genanki.Model(
     MODEL_CLOZE,
     "Тема · Пропуски",
-    fields=[{"name": "Text"}, {"name": "Extra"}],
+    fields=[{"name": "Text"}, {"name": "Extra"}] + EXTRAS,
     templates=[{
         "name": "Пропуск",
         "qfmt": read("4_cloze_front.html"),
@@ -100,7 +109,7 @@ audio_model = genanki.Model(
     fields=[
         {"name": "Audio"}, {"name": "Word"}, {"name": "Meaning"},
         {"name": "Image"}, {"name": "Hint"},
-    ],
+    ] + EXTRAS,
     templates=[{
         "name": "Карточка",
         "qfmt": read("5_audio_front.html"),
@@ -118,7 +127,7 @@ choice_model = genanki.Model(
         {"name": "Option1"}, {"name": "Option2"},
         {"name": "Option3"}, {"name": "Option4"},
         {"name": "Answer"}, {"name": "Explanation"},
-    ],
+    ] + EXTRAS,
     templates=[{
         "name": "Карточка",
         "qfmt": read("6_choice_front.html"),
@@ -132,6 +141,9 @@ deck = genanki.Deck(DECK_ID, "Демо · 6 типов карточек (жёл�
 
 
 def add(model, fields):
+    """Добавляет заметку, дополняя недостающие поля пустыми строками."""
+    need = len(model.fields)
+    fields = list(fields) + [""] * (need - len(fields))
     deck.add_note(genanki.Note(model=model, fields=fields))
 
 
@@ -142,6 +154,16 @@ add(basic, [
     "Какая теорема связывает стороны этого треугольника?",
     r"Теорема Пифагора: \(a^2 + b^2 = c^2\)",
     '<img src="triangle.svg">',
+])
+# Демонстрация общих полей: Описание + Цитата + Код (подсветка и номера строк)
+add(basic, [
+    "Что вернёт вызов squares(5)?",
+    "[0, 1, 4, 9, 16] — квадраты чисел 0..4.",
+    "",
+    "List comprehension возводит каждое i в квадрат для i от 0 до n−1.",
+    "«Programs must be written for people to read, and only incidentally for machines to execute.» — H. Abelson",
+    "def squares(n):\n    # вернуть список квадратов 0..n-1\n    return [i * i for i in range(n)]\n\nprint(squares(5))",
+    "Python",
 ])
 
 # 2. Базовая и обратная
@@ -187,7 +209,10 @@ add(choice_model, [
 
 
 pkg = genanki.Package(deck)
-pkg.media_files = [os.path.join(BASE, "media", "triangle.svg")]
+pkg.media_files = [
+    os.path.join(BASE, "media", "triangle.svg"),
+    os.path.join(BASE, "media", "_codehl.js"),
+]
 
 out = os.path.join(BASE, "6-card-types-demo.apkg")
 pkg.write_to_file(out)

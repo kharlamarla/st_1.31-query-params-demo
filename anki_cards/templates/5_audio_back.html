@@ -1,7 +1,10 @@
 {{FrontSide}}
+<a id="answer"></a>
 <div class="sheet answer-sheet">
   <span class="label">Слово</span>
   <div class="prompt">{{Word}}</div>
   {{#Image}}<div class="qimage">{{Image}}</div>{{/Image}}
   {{#Meaning}}<div class="meaning">{{Meaning}}</div>{{/Meaning}}
+  {{#Meaning}}<div class="audio-play">{{tts ru_RU:Meaning}}</div>{{/Meaning}}
 </div>
+<script>(function(){var a=document.getElementById("answer");if(!a)return;setTimeout(function(){try{a.scrollIntoView({block:"start"});}catch(e){a.scrollIntoView();}},60);})();</script>

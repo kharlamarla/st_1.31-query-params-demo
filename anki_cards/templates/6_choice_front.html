@@ -3,6 +3,9 @@
   <span class="label">Выберите ответ</span>
   <div class="prompt">{{Question}}</div>
   {{#Image}}<div class="qimage">{{Image}}</div>{{/Image}}
+  {{#Quote}}<blockquote class="quote">{{Quote}}</blockquote>{{/Quote}}
+  {{#Code}}<div class="code-wrap">{{#CodeLang}}<span class="code-lang">{{CodeLang}}</span>{{/CodeLang}}<pre class="code-block"><code>{{Code}}</code></pre></div>{{/Code}}
+  {{#Notes}}<div class="desc"><span class="label">Описание</span>{{Notes}}</div>{{/Notes}}
   <div id="mc-options" class="mc-options" data-answer="{{Answer}}">
     {{#Option1}}<button type="button" class="mc-option" data-idx="1">{{Option1}}</button>{{/Option1}}
     {{#Option2}}<button type="button" class="mc-option" data-idx="2">{{Option2}}</button>{{/Option2}}
@@ -11,6 +14,7 @@
   </div>
 </div>
 {{/Question}}
+{{#Code}}<script src="_codehl.js"></script><script>window.__codehl&&window.__codehl()</script>{{/Code}}
 
 <script>
 (function () {

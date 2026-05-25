@@ -1,20 +1,28 @@
 /* =========================================================
-   Жёлто-зелёно-коричневая тема для Anki
+   Жёлто-зелёно-коричневая тема для Anki («старая бумага»)
    Современная чистая типографика, мягкая для глаз.
    Работает в Anki desktop (Ubuntu) и AnkiDroid (Android),
    поддерживает ночной режим (.nightMode).
    ========================================================= */
 
 .card {
-  /* дневная палитра */
-  --bg:     #f4ecd2;  /* тёплый кремовый фон */
-  --paper:  #faf4e2;  /* «лист» карточки */
+  /* дневная палитра — «старый» тёплый жёлтый */
+  --bg:     #e8d9a8;  /* фон страницы: состаренный жёлтый */
+  --paper:  #f5edc8;  /* «лист» карточки — светлее фона */
   --ink:    #42382a;  /* основной текст — тёмно-коричневый, не чёрный */
   --muted:  #8a7a5c;  /* подсказки, описания, метки */
   --green:  #6b8e23;  /* оливковый акцент */
   --brown:  #9c7a4d;  /* рамки, разделители */
   --wrong:  #a4503a;  /* неверный выбор */
-  --line:   #e6d9b4;  /* тонкие линии */
+  --line:   #ddca96;  /* тонкие линии */
+  --code-bg:#fbf4d8;  /* фон блока кода */
+
+  /* токены кода (день) */
+  --t-kw:  #8a5a12;   /* ключевые слова — коричнево-золотой */
+  --t-str: #5d7d1f;   /* строки — зелёный */
+  --t-com: #9a8a66;   /* комментарии — приглушённый */
+  --t-num: #a4503a;   /* числа — красно-коричневый */
+  --t-fn:  #4a6b14;   /* вызовы функций */
 
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
   font-size: 20px;
@@ -37,6 +45,13 @@
   --brown:  #b08e5f;
   --wrong:  #cf7a5e;
   --line:   #4a4133;
+  --code-bg:#241f18;
+
+  --t-kw:  #d6b25a;
+  --t-str: #9caf6a;
+  --t-com: #b9a982;
+  --t-num: #cf7a5e;
+  --t-fn:  #b6c77f;
 }
 
 /* «лист» карточки */
@@ -53,6 +68,9 @@
 
 /* второй «лист» (ответ) на обороте */
 .sheet.answer-sheet { margin-top: 14px; }
+
+/* якорь автопрокрутки к ответу (см. JS на обороте) */
+#answer { display: block; height: 0; overflow: hidden; }
 
 /* ----- иерархия текста (только размер и жирность) ----- */
 
@@ -86,6 +104,10 @@
 .hint, .desc, .extra { font-size: .82em; font-weight: 400; color: var(--muted); }
 .hint { font-style: italic; }
 
+/* поле «Описание» — блок, виден на обеих сторонах если заполнено */
+.desc { display: block; text-align: left; max-width: 560px; margin: 16px auto 0; }
+.desc .label { display: block; margin-bottom: .3em; }
+
 /* разделитель лицо/оборот */
 hr, hr#answer {
   border: none;
@@ -106,7 +128,7 @@ img {
   background: #fff;
 }
 /* чтобы прозрачные PNG/SVG читались и ночью */
-.nightMode img { background: #f4ecd2; }
+.nightMode img { background: #e8d9a8; }
 
 /* ----- cloze (пропуски) ----- */
 .cloze, .cloze b { font-weight: 700; color: var(--green); }
@@ -120,6 +142,72 @@ img {
 /* ----- кнопка проигрывания звука ----- */
 .replay-button svg circle { fill: var(--green); }
 .replay-button svg path { fill: #fff; }
+
+/* ----- цитата (опциональный блок, на обеих сторонах) ----- */
+blockquote.quote {
+  text-align: left;
+  max-width: 560px;
+  margin: 16px auto 0;
+  padding: 10px 16px;
+  border-left: 4px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  background: rgba(107, 142, 35, .10);
+  font-style: italic;
+  font-size: .95em;
+  color: var(--ink);
+}
+.nightMode blockquote.quote { background: rgba(156, 175, 106, .14); }
+
+/* ----- блок кода: подсветка + нумерация строк ----- */
+.code-wrap { text-align: left; max-width: 600px; margin: 16px auto 0; }
+.code-lang {
+  display: inline-block;
+  font-size: .68em;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+pre.code-block {
+  margin: 0;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px 12px 0;
+  overflow-x: auto;
+  font-family: "SFMono-Regular", "Roboto Mono", "DejaVu Sans Mono", "Noto Sans Mono", Consolas, monospace;
+  font-size: .8em;
+  line-height: 1.6;
+  tab-size: 4;
+  color: var(--ink);
+}
+pre.code-block code { display: block; counter-reset: ln; background: none; border: none; }
+/* каждая строка — со своим номером (через CSS-счётчик) */
+.code-line {
+  display: block;
+  white-space: pre;
+  padding-left: 3.4em;
+  position: relative;
+}
+.code-line::before {
+  counter-increment: ln;
+  content: counter(ln);
+  position: absolute;
+  left: 0;
+  width: 2.4em;
+  padding-right: .7em;
+  text-align: right;
+  color: var(--muted);
+  opacity: .65;
+  border-right: 1px solid var(--line);
+}
+/* токены подсветки */
+.tok-kw  { color: var(--t-kw);  font-weight: 600; }
+.tok-str { color: var(--t-str); }
+.tok-com { color: var(--t-com); font-style: italic; }
+.tok-num { color: var(--t-num); }
+.tok-fn  { color: var(--t-fn); }
 
 /* ----- мультивыбор (выбор ответа) ----- */
 .mc-options {
