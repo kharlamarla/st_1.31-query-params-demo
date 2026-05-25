@@ -35,17 +35,17 @@
   -webkit-text-size-adjust: 100%;
 }
 
-/* ночная палитра (.nightMode добавляет Anki/AnkiDroid) */
+/* ночная палитра (.nightMode добавляет Anki/AnkiDroid) — тёплый тёмный, не чёрный */
 .nightMode.card, .nightMode .card, .card.nightMode {
-  --bg:     #2b2620;
-  --paper:  #332d25;
-  --ink:    #e8dcc0;
-  --muted:  #b9a982;
-  --green:  #9caf6a;
-  --brown:  #b08e5f;
-  --wrong:  #cf7a5e;
-  --line:   #4a4133;
-  --code-bg:#241f18;
+  --bg:     #2a2418;  /* тёплый тёмно-коричневый с оливковым подтоном */
+  --paper:  #352e1f;  /* «лист» — чуть светлее фона */
+  --ink:    #ece0c2;
+  --muted:  #bdac84;
+  --green:  #a6b86f;
+  --brown:  #b89364;
+  --wrong:  #d4805f;
+  --line:   #4d4230;
+  --code-bg:#211c11;
 
   --t-kw:  #d6b25a;
   --t-str: #9caf6a;
@@ -233,7 +233,7 @@ pre.code-block code { display: block; counter-reset: ln; background: none; borde
 }
 .mc-option:hover { border-color: var(--brown); }
 .mc-option.selected { border-color: var(--brown); background: #efe4c4; }
-.nightMode .mc-option.selected { background: #3d362b; }
+.nightMode .mc-option.selected { background: #45391f; }
 .mc-option.correct {
   border-color: var(--green);
   background: rgba(107, 142, 35, .16);
