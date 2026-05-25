@@ -1,0 +1,252 @@
+/* =========================================================
+   Жёлто-зелёно-коричневая тема для Anki («старая бумага»)
+   Современная чистая типографика, мягкая для глаз.
+   Работает в Anki desktop (Ubuntu) и AnkiDroid (Android),
+   поддерживает ночной режим (.nightMode).
+   ========================================================= */
+
+.card {
+  /* дневная палитра — «старый» тёплый жёлтый */
+  --bg:     #e8d9a8;  /* фон страницы: состаренный жёлтый */
+  --paper:  #f5edc8;  /* «лист» карточки — светлее фона */
+  --ink:    #42382a;  /* основной текст — тёмно-коричневый, не чёрный */
+  --muted:  #8a7a5c;  /* подсказки, описания, метки */
+  --green:  #6b8e23;  /* оливковый акцент */
+  --brown:  #9c7a4d;  /* рамки, разделители */
+  --wrong:  #a4503a;  /* неверный выбор */
+  --line:   #ddca96;  /* тонкие линии */
+  --code-bg:#fbf4d8;  /* фон блока кода */
+
+  /* токены кода (день) */
+  --t-kw:  #8a5a12;   /* ключевые слова — коричнево-золотой */
+  --t-str: #5d7d1f;   /* строки — зелёный */
+  --t-com: #9a8a66;   /* комментарии — приглушённый */
+  --t-num: #a4503a;   /* числа — красно-коричневый */
+  --t-fn:  #4a6b14;   /* вызовы функций */
+
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", Arial, sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--bg);
+  margin: 0;
+  padding: 22px 12px;
+  text-align: center;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ночная палитра (.nightMode добавляет Anki/AnkiDroid) — тёплый тёмный, не чёрный */
+.nightMode.card, .nightMode .card, .card.nightMode {
+  --bg:     #2a2418;  /* тёплый тёмно-коричневый с оливковым подтоном */
+  --paper:  #352e1f;  /* «лист» — чуть светлее фона */
+  --ink:    #ece0c2;
+  --muted:  #bdac84;
+  --green:  #a6b86f;
+  --brown:  #b89364;
+  --wrong:  #d4805f;
+  --line:   #4d4230;
+  --code-bg:#211c11;
+
+  --t-kw:  #d6b25a;
+  --t-str: #9caf6a;
+  --t-com: #b9a982;
+  --t-num: #cf7a5e;
+  --t-fn:  #b6c77f;
+}
+
+/* «лист» карточки */
+.sheet {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(60, 45, 20, .10);
+  padding: 26px 22px;
+}
+.nightMode .sheet { box-shadow: 0 4px 18px rgba(0, 0, 0, .35); }
+
+/* второй «лист» (ответ) на обороте */
+.sheet.answer-sheet { margin-top: 14px; }
+
+/* якорь автопрокрутки к ответу (см. JS на обороте) */
+#answer { display: block; height: 0; overflow: hidden; }
+
+/* ----- иерархия текста (только размер и жирность) ----- */
+
+/* маленькая метка-подпись, напр. «ВОПРОС» / «ОТВЕТ» */
+.label {
+  display: inline-block;
+  font-size: .70em;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: .55em;
+}
+
+/* главное на лице — крупно и жирно */
+.prompt { font-size: 1.75em; font-weight: 700; }
+
+/* ответ — заметно, но мягче */
+.answer { font-size: 1.3em; font-weight: 600; color: var(--green); }
+
+/* перевод/значение */
+.meaning { font-size: 1.1em; font-weight: 500; }
+
+/* текст с пропусками (cloze) — крупнее обычного, но не как заголовок */
+.cloze-text { font-size: 1.3em; font-weight: 500; line-height: 1.6; }
+
+/* поле ввода ответа (type-in) */
+.type-box { margin-top: 16px; }
+
+/* подсказки, описания, доп. поле — мельче и приглушённо */
+.hint, .desc, .extra { font-size: .82em; font-weight: 400; color: var(--muted); }
+.hint { font-style: italic; }
+
+/* поле «Описание» — блок, виден на обеих сторонах если заполнено */
+.desc { display: block; text-align: left; max-width: 560px; margin: 16px auto 0; }
+.desc .label { display: block; margin-bottom: .3em; }
+
+/* разделитель лицо/оборот */
+hr, hr#answer {
+  border: none;
+  border-top: 2px dashed var(--brown);
+  opacity: .55;
+  margin: 18px auto;
+  max-width: 90%;
+}
+
+/* ----- изображения (важно: «отвечаем по картинке») ----- */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: .7em auto;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+/* чтобы прозрачные PNG/SVG читались и ночью */
+.nightMode img { background: #e8d9a8; }
+
+/* ----- cloze (пропуски) ----- */
+.cloze, .cloze b { font-weight: 700; color: var(--green); }
+
+/* ----- сравнение ввода (type-in) ----- */
+#typeans { font-size: 1.1em; }
+.typeGood { color: var(--green); font-weight: 700; }
+.typeBad  { color: var(--wrong); font-weight: 700; }
+.typeMissed { color: var(--brown); font-weight: 700; }
+
+/* ----- кнопка проигрывания звука ----- */
+.replay-button svg circle { fill: var(--green); }
+.replay-button svg path { fill: #fff; }
+
+/* ----- цитата (опциональный блок, на обеих сторонах) ----- */
+blockquote.quote {
+  text-align: left;
+  max-width: 560px;
+  margin: 16px auto 0;
+  padding: 10px 16px;
+  border-left: 4px solid var(--green);
+  border-radius: 0 8px 8px 0;
+  background: rgba(107, 142, 35, .10);
+  font-style: italic;
+  font-size: .95em;
+  color: var(--ink);
+}
+.nightMode blockquote.quote { background: rgba(156, 175, 106, .14); }
+
+/* ----- блок кода: подсветка + нумерация строк ----- */
+.code-wrap { text-align: left; max-width: 600px; margin: 16px auto 0; }
+.code-lang {
+  display: inline-block;
+  font-size: .68em;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+pre.code-block {
+  margin: 0;
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 12px 14px 12px 0;
+  overflow-x: auto;
+  font-family: "SFMono-Regular", "Roboto Mono", "DejaVu Sans Mono", "Noto Sans Mono", Consolas, monospace;
+  font-size: .8em;
+  line-height: 1.6;
+  tab-size: 4;
+  color: var(--ink);
+}
+pre.code-block code { display: block; counter-reset: ln; background: none; border: none; }
+/* каждая строка — со своим номером (через CSS-счётчик) */
+.code-line {
+  display: block;
+  white-space: pre;
+  padding-left: 3.4em;
+  position: relative;
+}
+.code-line::before {
+  counter-increment: ln;
+  content: counter(ln);
+  position: absolute;
+  left: 0;
+  width: 2.4em;
+  padding-right: .7em;
+  text-align: right;
+  color: var(--muted);
+  opacity: .65;
+  border-right: 1px solid var(--line);
+}
+/* токены подсветки */
+.tok-kw  { color: var(--t-kw);  font-weight: 600; }
+.tok-str { color: var(--t-str); }
+.tok-com { color: var(--t-com); font-style: italic; }
+.tok-num { color: var(--t-num); }
+.tok-fn  { color: var(--t-fn); }
+
+/* ----- мультивыбор (выбор ответа) ----- */
+.mc-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 480px;
+  margin: 20px auto 0;
+}
+.mc-option {
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: 500;
+  text-align: left;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  width: 100%;
+  transition: border-color .12s ease, background .12s ease;
+}
+.mc-option:hover { border-color: var(--brown); }
+.mc-option.selected { border-color: var(--brown); background: #efe4c4; }
+.nightMode .mc-option.selected { background: #45391f; }
+.mc-option.correct {
+  border-color: var(--green);
+  background: rgba(107, 142, 35, .16);
+  font-weight: 600;
+}
+.mc-option.wrong {
+  border-color: var(--wrong);
+  background: rgba(164, 80, 58, .14);
+}
+.mc-explain {
+  margin-top: 16px;
+  text-align: left;
+  font-size: .9em;
+  color: var(--muted);
+}
+.mc-explain .label { display: block; }

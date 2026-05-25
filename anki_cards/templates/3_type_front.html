@@ -1,0 +1,12 @@
+{{#Front}}
+<div class="sheet">
+  <span class="label">Введите ответ</span>
+  <div class="prompt">{{Front}}</div>
+  {{#Image}}<div class="qimage">{{Image}}</div>{{/Image}}
+  {{#Quote}}<blockquote class="quote">{{Quote}}</blockquote>{{/Quote}}
+  {{#Code}}<div class="code-wrap">{{#CodeLang}}<span class="code-lang">{{CodeLang}}</span>{{/CodeLang}}<pre class="code-block"><code>{{Code}}</code></pre></div>{{/Code}}
+  {{#Notes}}<div class="desc"><span class="label">Описание</span>{{Notes}}</div>{{/Notes}}
+  <div class="type-box">{{type:Back}}</div>
+</div>
+{{/Front}}
+{{#Code}}<script src="_codehl.js"></script><script>window.__codehl&&window.__codehl()</script>{{/Code}}
