@@ -1,0 +1,9 @@
+<div class="sheet">
+  <span class="label">Прослушайте</span>
+  <div style="display:none">{{Word}}</div>
+  <div class="audio-play">
+    {{#Audio}}{{Audio}}{{/Audio}}
+    {{^Audio}}{{tts en_US voices=Apple_Samantha:Word}}{{/Audio}}
+  </div>
+  {{#Hint}}<div class="hint">{{hint:Hint}}</div>{{/Hint}}
+</div>

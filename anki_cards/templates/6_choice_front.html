@@ -1,0 +1,86 @@
+{{#Question}}
+<div class="sheet">
+  <span class="label">Выберите ответ</span>
+  <div class="prompt">{{Question}}</div>
+  {{#Image}}<div class="qimage">{{Image}}</div>{{/Image}}
+  <div id="mc-options" class="mc-options" data-answer="{{Answer}}">
+    {{#Option1}}<button type="button" class="mc-option" data-idx="1">{{Option1}}</button>{{/Option1}}
+    {{#Option2}}<button type="button" class="mc-option" data-idx="2">{{Option2}}</button>{{/Option2}}
+    {{#Option3}}<button type="button" class="mc-option" data-idx="3">{{Option3}}</button>{{/Option3}}
+    {{#Option4}}<button type="button" class="mc-option" data-idx="4">{{Option4}}</button>{{/Option4}}
+  </div>
+</div>
+{{/Question}}
+
+<script>
+(function () {
+  function run() {
+    var box = document.getElementById('mc-options');
+    if (!box) return;
+    var opts = Array.prototype.slice.call(box.querySelectorAll('.mc-option'));
+    if (!opts.length) return;
+
+    var ans = box.getAttribute('data-answer');
+    var isBack = !!document.getElementById('mc-back');
+    var KEY_ORDER = 'ankiMcOrder', KEY_SEL = 'ankiMcSel';
+
+    function save(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+    function drop(k) { try { localStorage.removeItem(k); } catch (e) {} }
+
+    if (!isBack) {
+      // ЛИЦО: перемешать варианты, запомнить порядок, сбросить прошлый выбор
+      var order = opts.map(function (o) { return o.getAttribute('data-idx'); });
+      for (var i = order.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var t = order[i]; order[i] = order[j]; order[j] = t;
+      }
+      order.forEach(function (idx) {
+        var el = box.querySelector('.mc-option[data-idx="' + idx + '"]');
+        if (el) box.appendChild(el);
+      });
+      save(KEY_ORDER, JSON.stringify(order));
+      drop(KEY_SEL);
+
+      opts.forEach(function (o) {
+        o.addEventListener('click', function () {
+          opts.forEach(function (x) { x.classList.remove('selected'); });
+          o.classList.add('selected');
+          save(KEY_SEL, o.getAttribute('data-idx'));
+        });
+      });
+    } else {
+      // ОБОРОТ: воспроизвести тот же порядок и оценить
+      var ord = null;
+      try { ord = JSON.parse(load(KEY_ORDER)); } catch (e) {}
+      if (ord && ord.length) {
+        ord.forEach(function (idx) {
+          var el = box.querySelector('.mc-option[data-idx="' + idx + '"]');
+          if (el) box.appendChild(el);
+        });
+      }
+      var sel = load(KEY_SEL);
+      opts.forEach(function (o) {
+        o.style.pointerEvents = 'none';
+        var correct = (o.getAttribute('data-idx') === ans);
+        if (correct) {
+          o.classList.add('correct');
+          var dst = document.getElementById('mc-correct-text');
+          if (dst) dst.innerHTML = o.innerHTML;
+        }
+        if (sel !== null && o.getAttribute('data-idx') === sel) {
+          o.classList.add('selected');
+          if (!correct) o.classList.add('wrong');
+        }
+      });
+    }
+  }
+
+  // setTimeout — чтобы на обороте успел появиться #mc-back (он идёт после {{FrontSide}})
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(run, 0); });
+  } else {
+    setTimeout(run, 0);
+  }
+})();
+</script>
